@@ -1,0 +1,88 @@
+{
+  "name": "@hikasami/naming",
+  "version": "1.0.0",
+  "description": "Hikasami CSS Naming Convention (HCNC) - BiomeJS plugin for validating CSS class naming",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "hcnc": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./biome": {
+      "types": "./dist/biome.d.ts",
+      "import": "./dist/biome.mjs",
+      "require": "./dist/biome.js"
+    },
+    "./rules/*": "./rules/*"
+  },
+  "files": [
+    "dist",
+    "rules",
+    "scripts",
+    "biome.json"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/biome.ts src/cli.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts src/biome.ts src/cli.ts --format cjs,esm --dts --watch",
+    "lint": "biome check .",
+    "test": "npx tsx src/test.ts",
+    "prepublishOnly": "pnpm build",
+    "postinstall": "node scripts/postinstall.js || true"
+  },
+  "keywords": [
+    "naming",
+    "hikasami",
+    "css",
+    "bem",
+    "hcnc",
+    "biome",
+    "biomejs",
+    "lint",
+    "linter",
+    "class-naming",
+    "scss",
+    "sass"
+  ],
+  "author": {
+    "name": "Hikasami Inc.",
+    "url": "https://github.com/hikasami"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hikasami/naming"
+  },
+  "homepage": "https://github.com/hikasami/naming#readme",
+  "bugs": {
+    "url": "https://github.com/hikasami/naming/issues"
+  },
+  "packageManager": "pnpm@10.25.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": ">=1.5.0"
+  },
+  "peerDependenciesMeta": {
+    "@biomejs/biome": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.13.10",
+    "tsup": "^8.3.5",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.2"
+  }
+}

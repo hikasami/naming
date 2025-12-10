@@ -1,0 +1,27 @@
+language css
+
+// HCNC Rule: Validate CSS class selectors
+// This rule checks that all CSS class selectors follow the Hikasami CSS Naming Convention
+
+// Valid patterns:
+// - Block: .card, .button, .header-nav
+// - Element L1: .card_info, .button_icon
+// - Element L2: .card_info__title
+// - Modifier: .card--highlighted, .card_info--active
+// - State: .isActive, .hasError
+
+// Pattern for invalid class selector
+pattern hcnc_invalid_selector() {
+  `.$name` where {
+    // Match class selectors that DON'T match HCNC convention
+    $name <: identifier(),
+    $name <: not r"^(([a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*_[a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*_[a-z][a-z0-9]*(-[a-z0-9]+)*__[a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*(_[a-z][a-z0-9]*(-[a-z0-9]+)*)?(__[a-z][a-z0-9]*(-[a-z0-9]+)*)?--[a-z][a-z0-9]*(-[a-z0-9]+)*)|(is[A-Z][a-zA-Z0-9]*)|(has[A-Z][a-zA-Z0-9]*)|([a-z]+(-[a-z0-9]+)*))$"
+  }
+}
+
+// Main rule
+hcnc_invalid_selector() => . where {
+  register_diagnostic(
+    message = "CSS class selector does not follow HCNC naming convention."
+  )
+}

@@ -1,0 +1,35 @@
+language js
+
+// HCNC Rule: Validate className/class attributes in JSX/TSX
+// This rule checks that all class names follow the Hikasami CSS Naming Convention
+
+// Valid patterns:
+// - Block: lowercase/kebab-case (card, button, header-nav)
+// - Element L1: block_element (card_info, button_icon)
+// - Element L2: block_element__nested (card_info__title)
+// - Modifier: block--modifier (card--highlighted)
+// - State: is/has + PascalCase (isActive, hasError)
+// - Utility: atomic classes (mt-2, flex, text-sm)
+
+// Pattern for className attribute with string literal
+pattern hcnc_classname_string() {
+  or {
+    // JSX className="..."
+    `className=$value` where {
+      $value <: string(fragment = $str),
+      $str <: not r"^(\s*(([a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*_[a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*_[a-z][a-z0-9]*(-[a-z0-9]+)*__[a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*(_[a-z][a-z0-9]*(-[a-z0-9]+)*)?(__[a-z][a-z0-9]*(-[a-z0-9]+)*)?--[a-z][a-z0-9]*(-[a-z0-9]+)*)|(is[A-Z][a-zA-Z0-9]*)|(has[A-Z][a-zA-Z0-9]*)|([a-z]+(-[a-z0-9]+)*))(\s+|$))+$"
+    },
+    // HTML class="..."
+    `class=$value` where {
+      $value <: string(fragment = $str),
+      $str <: not r"^(\s*(([a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*_[a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*_[a-z][a-z0-9]*(-[a-z0-9]+)*__[a-z][a-z0-9]*(-[a-z0-9]+)*)|([a-z][a-z0-9]*(-[a-z0-9]+)*(_[a-z][a-z0-9]*(-[a-z0-9]+)*)?(__[a-z][a-z0-9]*(-[a-z0-9]+)*)?--[a-z][a-z0-9]*(-[a-z0-9]+)*)|(is[A-Z][a-zA-Z0-9]*)|(has[A-Z][a-zA-Z0-9]*)|([a-z]+(-[a-z0-9]+)*))(\s+|$))+$"
+    }
+  }
+}
+
+// Main rule
+hcnc_classname_string() => . where {
+  register_diagnostic(
+    message = "Class name does not follow HCNC naming convention. Expected: block, block_element, block_element__nested, block--modifier, isState, or utility class."
+  )
+}
